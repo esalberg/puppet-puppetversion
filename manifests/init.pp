@@ -25,6 +25,10 @@
 # [*time_delay*]
 # (Windows only) - How many minutes in the future should we schedule the upgrade task for
 #
+# [*install_opts]
+# (Windows only) - Additional installation options for msiexec
+#   Already specified: /qn /l*v C:\Windows\Temp\install_puppet.log 
+#
 # [*ruby_augeas_version*]
 # (Debian only) - The version of ruby-augeas to install from RubyGems.
 #
@@ -37,10 +41,11 @@
 # }
 #
 class puppetversion(
-  $version = $puppetversion::params::version,
-  $proxy_address = $puppetversion::params::proxy_address,
-  $download_source = $puppetversion::params::download_source,
-  $time_delay = $puppetversion::params::time_delay,
+  $version             = $puppetversion::params::version,
+  $proxy_address       = $puppetversion::params::proxy_address,
+  $download_source     = $puppetversion::params::download_source,
+  $time_delay          = $puppetversion::params::time_delay,
+  $install_opts        = $puppetversion::params::install_opts,
   $ruby_augeas_version = $puppetversion::params::ruby_augeas_version
 ) inherits puppetversion::params {
 
@@ -87,7 +92,9 @@ class puppetversion(
         package { 'ruby-augeas':
           ensure          => present,
           provider        => 'gem',
-          install_options => { '-v' => $ruby_augeas_version },
+          install_options => {
+            '-v' => $ruby_augeas_version,
+          }
         }
       }
     }
