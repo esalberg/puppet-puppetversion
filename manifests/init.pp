@@ -16,6 +16,10 @@
 # [*version*]
 # The version of puppet to be installed
 #
+# [*version_fact*]
+# The fact to use for checking the currently installed version of puppet
+#  $::puppetversion (FOSS), $::pe_version (PE)
+#
 # [*package_windows*]
 # (Windows only) - The package name to get (msi)
 #   Default: puppet-${version}.msi
@@ -46,6 +50,7 @@
 #
 class puppetversion(
   $version             = $puppetversion::params::version,
+  $version_fact        = $puppetversion::params::version_fact,
   $package_windows     = $puppetversion::params::package_windows,
   $proxy_address       = $puppetversion::params::proxy_address,
   $download_source     = $puppetversion::params::download_source,
@@ -115,7 +120,7 @@ class puppetversion(
     }
     'windows': {
 
-      if $::puppetversion != $version {
+      if $version_fact != $version {
 
         # Using powershell to uninstall and reinstall puppet because there is not workflow
         # support for inplace upgrades
