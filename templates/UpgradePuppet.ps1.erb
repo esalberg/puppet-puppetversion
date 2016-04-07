@@ -2,9 +2,9 @@ param (
   [Parameter(Mandatory=$true)]
   [string]$version
 )
-$version = <%= @version %>
-$sourceMsi = "<%= @download_source %>/puppet-$version.msi"
-$destMsi = "C:\Windows\Temp\puppet-$version.msi"
+
+$sourceMsi = "<%= @download_source %>/<%= @package_windows %>"
+$destMsi = "C:\Windows\Temp\<%= @package_windows %>"
 
 $majorVersion = [System.Environment]::OSVersion.Version.Major
 if ($majorVersion -eq 5) {
@@ -37,7 +37,7 @@ $wc.DownloadFile($sourceMsi, $destMsi)
 Copy-Item "$sourceConf" -Destination $destConf
 
 Wait-Process -name msiexec -timeout 30 -ErrorAction SilentlyContinue
-$ip = (Start-Process -FilePath "msiexec.exe" -ArgumentList "/i C:\Windows\Temp\puppet-$version.msi /qn /l*v $installLog <%= @install_opts %>" -Wait -Passthru).ExitCode
+$ip = (Start-Process -FilePath "msiexec.exe" -ArgumentList "/i C:\Windows\Temp\<%= @package_windows %> /qn /l*v $installLog <%= @install_opts %>" -Wait -Passthru).ExitCode
 if ( $ip -ne 0 ) { Exit 1 }
 
 Copy-Item $destConf -Destination "$sourceConf" -Force

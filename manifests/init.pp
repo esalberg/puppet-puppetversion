@@ -16,6 +16,10 @@
 # [*version*]
 # The version of puppet to be installed
 #
+# [*package_windows*]
+# (Windows only) - The package name to get (msi)
+#   Default: puppet-${version}.msi
+#
 # [*proxy_address*]
 # (Windows only) - The proxy address to use when downloading the msi
 #
@@ -42,6 +46,7 @@
 #
 class puppetversion(
   $version             = $puppetversion::params::version,
+  $package_windows     = $puppetversion::params::package_windows,
   $proxy_address       = $puppetversion::params::proxy_address,
   $download_source     = $puppetversion::params::download_source,
   $time_delay          = $puppetversion::params::time_delay,
